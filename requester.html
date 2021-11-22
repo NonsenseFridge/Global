@@ -1,0 +1,19 @@
+<script>
+	const xhr = new XMLHttpRequest();
+	xhr.open('POST', 'https://closeapp.co.il/apps/tests10/magnetic/jsonSaver.php', true);
+
+	
+	xhr.onreadystatechange = function() { // Call a function when the state changes.
+		if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+			document.write(xhr.response)
+		}
+	}
+
+	xhr.send(JSON.stringify({
+		"filename":"package.json",
+		"password": "123",
+		"content":JSON.stringify({ami:1234}),
+		"upload":true
+
+	}))
+</script>

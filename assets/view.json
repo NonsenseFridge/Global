@@ -1,0 +1,484 @@
+{
+    "setting": {
+        "meta": {
+            "description": "Share Your Nonsense fridge",
+            "title": "Nonsense fridge",
+            "image": "https://closeapp.co.il/racheli/cardGameV2/assets/logo.png",
+            "keywords": "Nonsense fridge"
+        }
+    },
+    "itemsToLoad": [
+        {
+            "font": "EBGaramond-Bold",
+            "src": "font/EBGaramond-Bold.ttf",
+            "type": "OpenType"
+        },
+        {
+            "font": "EBGaramond-Regular",
+            "src": "font/EBGaramond-Regular.ttf",
+            "type": "OpenType"
+        },
+        "images/topMarkView.png",
+        "images/lock.png",
+        "images/logo.png",
+        "images/menuButton.png",
+        "images/fridge.png",
+        "images/bgImage.png"
+    ],
+    "baseStyle": {
+        "font": "EBGaramond-Regular",
+        "group": {
+            "baseLabel": {
+                "size": 40,
+                "bold": true,
+                "color": "#FFFFFF",
+                "align": "center"
+            }
+        }
+    },
+    "fullFrame": {
+        "fullCon": {
+            "name": "fullCon",
+            "type": "Container",
+            "props": {
+                "a": 720,
+                "b": 1280
+            },
+            "pos": {
+                "horizontal": "center",
+                "vertical": "bottom",
+                "x": 0,
+                "y": 0
+            },
+            "items": {
+                "TopCon": {
+                    "name": "fullCon",
+                    "type": "Container",
+                    "props": {
+                        "a": 720,
+                        "b": 91
+                    },
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "top",
+                        "x": 0,
+                        "y": 0
+                    },
+                    "items": {
+                        "bgRect": {
+                            "name": "bgRect",
+                            "pos": {
+                                "horizontal": "center",
+                                "vertical": "center"
+                            },
+                            "type": "Rectangle",
+                            "alpha": 1,
+                            "props": {
+                                "group": "popupRect",
+                                "color": "#000000",
+                                "borderWidth": 0,
+                                "width": 720,
+                                "height": 91
+                            }
+                        },
+                        "logo": {
+                            "pos": {
+                                "horizontal": "left",
+                                "vertical": "center",
+                                "x": 0,
+                                "y": 0
+                            },
+                            "name": "logo",
+                            "type": "Bitmap",
+                            "props": {
+                                "image": "images/logo.png"
+                            }
+                        
+                        },
+                        "menuButton": {
+                           
+                            "pos": {
+                                "horizontal": "right",
+                                "vertical": "center",
+                                "x": 20,
+                                "y": 0
+                            },
+                            "name": "menuButton",
+                            "type": "Bitmap",
+                            "props": {
+                                "image": "images/menuButton.png"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "fridge": {
+        "fridgeCon": {
+            "name": "fridgeCon",
+            "type": "Container",
+            "props": {
+                "a": 720,
+                "b": 1280
+            },
+            "pos": {
+                "horizontal": "center",
+                "vertical": "bottom",
+                "x": 0,
+                "y": 0
+            },
+            "items": {
+               
+                "fridge": {
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center",
+                        "x": 0,
+                        "y": 0
+                    },
+                    "name": "fridge",
+                    "type": "Bitmap",
+                    "props": {
+                        "image": "images/fridge.png"
+                    }
+                },
+                "topMarkView":{
+                    "name": "topMarkView",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "top",
+                        "x": 0,
+                        "y": 0
+                    },
+                    "type": "Bitmap",
+                    "alpha": 1,
+                    "props": {
+                        "image": "images/topMarkView.png"
+                    }
+                },
+                "topRect":{
+                    "name": "topRect",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "top",
+                        "x": -20,
+                        "y": 180
+                    },
+                    "type": "Rectangle",
+                    "alpha": 1,
+                    "props": {
+                        "borderColor": "#000000",
+                        "borderWidth": 1,
+                        "color": "#d6b667",
+                        "width": 470,
+                        "height": 330
+                    }
+                },
+                "bottomRect":{
+                    "name": "bottomRect",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "bottom",
+                        "x": -20,
+                        "y": 30
+                    },
+                    "type": "Rectangle",
+                    "alpha": 1,
+                    "props": {
+                        "borderColor": "#000000",
+                        "borderWidth": 1,
+                        "color": "#d6b667",
+                        "width": 470,
+                        "height": 710
+                    }
+                }
+            }
+        }
+    },
+    "lockScreen": {
+        "lockScreenCon": {
+            "pos": {
+                "horizontal": "center",
+                "vertical": "center",
+                "x":0,
+                "y":0
+            },
+            "name": "lockScreenCon",
+            "type": "Container",
+            "items": {
+                "bgRect":{
+                    "name": "bgRect",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center"
+                    },
+                    "type": "Rectangle",
+                    "props": {
+                        "color": "rgba(0,0,0,0.01)",
+                        "width": 720,
+                        "height": 1280
+                    }
+                },
+                "label": {
+                    "name": "label",
+                    "pos": {
+                        "horizontal": "right",
+                        "vertical": "top",
+                        "x": 200,
+                        "y": 130
+                    },
+                    "type": "Label",
+                    "props": {
+                        "size": 28,
+                        "bold": true,
+                        "color": "#000000",
+                        "text": "wait...",
+                        "group": "baseLabel"
+                    }
+                }
+               
+              
+            }
+        }
+    },
+    "timer": {
+        "timerCon": {
+            "pos": {
+                "horizontal": "right",
+                "vertical": "top",
+                "x":90,
+                "y":120
+            },
+            "props": {
+                "a": 100,
+                "b": 100
+            },
+            "name": "timerCon",
+            "type": "Container",
+            "items": {
+                "bgRect":{
+                    "name": "bgRect",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center"
+                    },
+                    "type": "Rectangle",
+                    "alpha": 1,
+                    "props": {
+                        "borderColor": "#000000",
+                        "borderWidth": 1,
+                        "corner": 30,
+                        "color": "#d6b667",
+                        "width": 100,
+                        "height": 100
+                    }
+                },
+                "label": {
+                    "name": "label",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center",
+                        "x": 0,
+                        "y": 0
+                    },
+                    "type": "Label",
+                    "props": {
+                        "size": 48,
+                        "bold": true,
+                        "color": "#6b5f47",
+                        "text": "999",
+                        "group": "baseLabel"
+                    }
+                
+                },
+                "labelLock": {
+                    "name": "labelLock",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center",
+                        "x": 40,
+                        "y": -30
+                    },
+                    "type": "Bitmap",
+                    "props": {
+                        "image": "images/lock.png",
+                        "width":50
+                    }
+                }
+               
+              
+            }
+        }
+    },
+    "magnet": {
+        "magnetCon": {
+            "name": "magnetCon",
+            "type": "Container",
+            "items": {
+                "bgRect":{
+                    "name": "bgRect",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center"
+                    },
+                    "type": "Rectangle",
+                    "alpha": 1,
+                    "props": {
+                        "borderColor": "#000000",
+                        "borderWidth": 1,
+                        "color": "#d6b667",
+                        "width": 100,
+                        "height": 39
+                    }
+                },
+                "label": {
+                    "name": "label",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center",
+                        "x": 0,
+                        "y": 0
+                    },
+                    "type": "Label",
+                    "props": {
+                        "size": 28,
+                        "bold": true,
+                        "color": "#6b5f47",
+                        "text": "ירושלים שלי",
+                        "group": "baseLabel"
+                    }
+                }
+               
+              
+            }
+        }
+    },
+    "managerSetting": {
+        "texts": {
+            "pleaseEnterAllText": "נא למלא את כל הסקר",
+            "groupName": "שם הקבוצה",
+            "schoolName": "שם בית הספר",
+            "groupNameText": "שם הכיתה או הקבוצה שלכם",
+            "schoolNameText": "שם בית הספר או הארגון שלכם",
+            "enterPassword": "סיסמת כניסה",
+            "userVote": "כבר הצבעתם בסקר זה",
+            "userVoteText": "כשתסתיים ההצבעה תוכלו לצפות בתוצאות",
+            "userFinish": "ההצבעה נקלטה",
+            "userFinishText": "כשתסתיים ההצבעה תוכלו לצפות בתוצאות",
+            "sekerClosed": "הקבוצה נעולה להצבעה",
+            "sekerClosedText": "בקשו ממנהלי הקבוצה לפתוח את ההצבעה",
+            "notRightPassword": "הסיסמה שגויה",
+            "theLinkCopyed": "הקישור הועתק",
+            "shareLinkCopyed": "שלחו את הקישור לתלמידים",
+            "confirmButtonText": "אישור",
+            "cancelButtonText": "ביטול",
+            "reverseButtons": true,
+            "showFinishPopup": true,
+            "password": "1967"
+        }
+    },
+    "gameView": {
+        "title": "",
+        "direction": "ltr",
+        "haveServerImages": false,
+        "images": {
+            "backgroundColor": "#FFFFFF",
+            "bgImageForAll": "images/bgImage.png",
+            "downTextForScratch": "images/downTextForScratch.png",
+            "createNewButtonBg": "images/createNewButtonBg.png",
+            "image_down": "images/downImageG.jpg"
+        },
+        "texts": {
+            "shareText": " קישור לקיר הירושלמי שלנו! ",
+            "shareTheGameTitle": "שתפו את הקישור עם המשתתפים :)",
+            "cancelButtonText": "שיתפתי!",
+            "confirmButtonText": "העתקת קישור",
+            "saveAtzuma": "צרו קיר משלכם",
+            "titleAfterCopy": "הקישור הועתק",
+            "textAfterCopy": "שתפו את הקישור :)"
+        },
+        "connectPopup": {
+            "name": "connectPopup",
+            "type": "Container",
+            "props": {
+                "a": 720,
+                "b": 1280
+            },
+            "pos": {
+                "horizontal": "center",
+                "vertical": "center"
+            },
+            "items": [
+                {
+                    "name": "bgRect",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center"
+                    },
+                    "type": "Rectangle",
+                    "alpha": 0.8,
+                    "props": {
+                        "group": "popupRect",
+                        "color": "rgba(0,0,0,0.2)",
+                        "borderWidth": 0,
+                        "width": 720,
+                        "height": 1280
+                    }
+                },
+                {
+                    "name": "bgRectRedBg",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center",
+                        "y": 0
+                    },
+                    "type": "Rectangle",
+                    "alpha": 0.2,
+                    "props": {
+                        "group": "popupRect",
+                        "color": "#1141b0",
+                        "borderWidth": 0,
+                        "corner": 20,
+                        "width": 360,
+                        "height": 100
+                    }
+                },
+                {
+                    "name": "bgRectRed",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center",
+                        "y": 0
+                    },
+                    "type": "Rectangle",
+                    "alpha": 0.8,
+                    "props": {
+                        "group": "popupRect",
+                        "color": "#F8E9DC",
+                        "borderWidth": 0,
+                        "corner": 20,
+                        "width": 360,
+                        "height": 100
+                    }
+                },
+                {
+                    "name": "theText",
+                    "pos": {
+                        "horizontal": "center",
+                        "vertical": "center",
+                        "y": -5
+                    },
+                    "type": "Label",
+                    "props": {
+                        "text": "Loading Your Nonsense fridge",
+                        "size": 29,
+                        "lineHeight": 39,
+                        "color": "#ffffff",
+                        "group": "baseLabel"
+                    }
+                }
+            ]
+        }
+    }
+}
