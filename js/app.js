@@ -27,6 +27,9 @@ function App() {
         p.thatMe = false;
 
         p.waitTimeSecound = 30;
+        if (queryString.time) {
+            p.waitTimeSecound = queryString.time;
+        }
         p.waitTimeMiliSecound = p.waitTimeSecound * 1000;
 
         p.isTimersActive = false;
@@ -59,10 +62,25 @@ function App() {
             p.fridgeCon.topMarkView.visible = false;
             p.fridgeCon.topRect.visible = false;
             p.fridgeCon.bottomRect.visible = false;
+
             p.fullCon.fullCon.menuButton.expand();
             p.fullCon.fullCon.menuButton.on("mousedown", function () {
                 askPassword(p);
             })
+
+            p.fullCon.fullCon.facebookButton.expand();
+            p.fullCon.fullCon.facebookButton.on("mousedown", function () {
+                zgo("https://www.facebook.com/groups/957241768480434", "_blank");
+            })
+
+
+            p.fullCon.fullCon.searchButton.expand();
+            p.fullCon.fullCon.searchButton.on("mousedown", function () {
+                p.showSearch();
+            })
+            p.createKeyboard();
+            p.fridgeCon.searchTextInput.visible = false;
+
 
             stage.connectPopup.top();
             if (queryString.isLocal != "true") {
@@ -78,6 +96,112 @@ function App() {
 
     }
 
+    App.prototype.hideSearch = function () {
+        zog("hideSearch",p.fridgeCon.searchTextInput.visible)
+        if (p.fridgeCon.searchTextInput.visible == false) {
+            return;
+        }
+        p.fridgeCon.searchTextInput.textInput.text = "";
+        zog(p.fridgeCon.searchTextInput.textInput.text.length);
+        p.fridgeCon.keyboard.selectedIndex = 0;
+        p.fridgeCon.searchTextInput.visible = false;
+
+        var items_arr = [];
+        p.fridgeCon.keyboard.hide();
+        p.fridgeCon.keyboard.top();
+        loop(p.itemsObj, function (conName, con) {
+            con.visible = true;
+        })
+        p.win.conWrapper.wrapper2.remove(p.win.conWrapper.wrapper2.items);
+       
+        p.updateStatus(true);
+        stage.update();
+    }
+
+    App.prototype.showSearch = function () {
+        zog("showSearch")
+        p.fridgeCon.searchTextInput.visible = !p.fridgeCon.searchTextInput.visible;
+
+        if (p.fridgeCon.searchTextInput.visible) {
+            p.fridgeCon.keyboard.show();
+        } else {
+            p.hideSearch();
+        }
+        stage.update();
+    }
+
+    App.prototype.createKeyboard = function (showEdit) {
+        var p = this;
+        // create Labels to capture the text from the keyboard
+        //var text1 = new Label({ text: "", backgroundColor: white }).pos(100, 100);
+        var text1 = p.fridgeCon.searchTextInput.textInput;
+        p.fridgeCon.searchTextInput.closeButton.tap(()=>{
+            p.hideSearch();
+        })
+        // create a new Keyboard and pass in the labels as an array
+        // or if just one label, then pass in the label
+        var data = [
+            [
+                ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+                ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+                ["z", "x", "c", "v", "b", "n", "m", "backspace"],
+                [] // rest of bottom line automatically added
+            ], [
+                ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
+                ["!", "@", "#", "$", "/", "^", "&", "*", "(", ")"],
+                ["1/2", "-", "'", "\"", ":", ";", ",", "?", "backspace"],
+                ["ABC"] // rest of bottom line automatically added
+            ], [
+                ["+", "x", "%", "=", "<", ">", "{", "}", "[", "]"],
+                ["€", "£", "¥", "$", "￦", "~", "`", "¤", "♡", "☆"],
+                ["2/2", "_", "\\", "|", "《", "》", "¡", "¿", "backspace"],
+                ["ABC"] // rest of bottom line automatically added
+            ]
+        ];
+        var keyboard = new Keyboard({ labels: [text1], corner: 10, data: data, place: false, placeClose: false });
+        p.fridgeCon.keyboard = keyboard;
+        // if just the letter is needed use the keydown event
+        keyboard.on("close", function (e) {
+            p.hideSearch();
+        });
+        keyboard.on("keydown", function (e) {
+            var items_arr = [];
+            loop(p.itemsObj, function (conName, con) {
+                
+                if (con.startObj.isTop) {
+                    con.visible = true;
+                } else {
+                    if ((con.data.text.toLowerCase()).indexOf(text1.text.toLowerCase()) > -1) {
+                        con.visible = true;
+                        items_arr.push(con);
+                    } else {
+                       con.visible = false;
+                    }
+                };
+            })
+
+            p.win.conWrapper.wrapper2.remove(p.win.conWrapper.wrapper2.items);
+            p.win.conWrapper.wrapper2.add(items_arr);
+
+            stage.update();
+        });
+        keyboard.y = 200;
+
+        // create events to capture a mousedown on the labels
+        var text1Event = text1.on("mousedown", activate);
+        function activate(e) {
+            keyboard.show();
+            // remove the events when keyboard is active
+            text1.off("mousedown", text1Event);
+        }
+
+        // add back the events to show the keyboard
+        keyboard.on("close", function () {
+            text1.on("mousedown", text1Event);
+        });
+        stage.update();
+    }
+
     App.prototype.startView = function (showEdit) {
 
         if (stage.connectPopup) stage.connectPopup.dispose();
@@ -89,7 +213,7 @@ function App() {
         p.win.loc(p.fridgeCon.bottomRect.x - p.fridgeCon.bottomRect.width / 2, p.fridgeCon.bottomRect.y - p.fridgeCon.bottomRect.height / 2)
 
         timeout(1, function () {
-           // p.showEditMode();
+            // p.showEditMode();
         })
 
         js.helper.DisplayObjectFromJson.buildView(p.mainAssets.timer, stage);
@@ -201,6 +325,8 @@ function App() {
         }
         p.lockScreenCon.top();
         p.timerCon.top();
+
+        p.fridgeCon.keyboard.top();
 
         stage.update();
     }
@@ -335,7 +461,7 @@ function App() {
     }
     App.prototype.updateSendObj = function () {
         if (p.playerObj != undefined) {
-
+           
 
             result = p.likeRef.update({ sendObj: p.itemPlaceObj });;
             result.then(function () {
@@ -387,25 +513,29 @@ function App() {
 
     }
 
-    App.prototype.updateStatus = function () {
-        if (p.thatMe) return
+    App.prototype.updateStatus = function (go) {
+        zog("updateStatus0");
+        if (p.thatMe && go==undefined) return
         if (p.itemsObj && p.itemPlaceObj) {
             loop(p.itemsObj, function (itemName, magnetCon) {
                 //debugger
-                if (p.itemPlaceObj[magnetCon.coundId])
-                {
-                if (p.itemPlaceObj[magnetCon.coundId].isTop) {
-                    magnetCon.addTo();
-                    magnetCon.loc(p.itemPlaceObj[magnetCon.coundId].newX, p.itemPlaceObj[magnetCon.coundId].newY);
-                    magnetCon.startObj.isTop = true;
-                } else {
-                    magnetCon.addTo(magnetCon.startParent);
-                    magnetCon.startObj.isTop = false;
-                    //magnetCon.loc(p.itemPlaceObj[magnetCon.coundId].x,p.itemPlaceObj[magnetCon.coundId].y);
-                    magnetCon.loc(magnetCon.startObj.x, magnetCon.startObj.y);
-                }}
+                if (p.itemPlaceObj[magnetCon.coundId]) {
+                    if (p.itemPlaceObj[magnetCon.coundId].isTop) {
+                        magnetCon.addTo();
+                        magnetCon.loc(p.itemPlaceObj[magnetCon.coundId].newX, p.itemPlaceObj[magnetCon.coundId].newY);
+                        magnetCon.startObj.isTop = true;
+                    } else {
+                        magnetCon.addTo(magnetCon.startParent);
+                        magnetCon.startObj.isTop = false;
+                        zog("magnetCon.startParent",magnetCon.startParent.name,magnetCon.startParent.visible)
+                        //magnetCon.loc(p.itemPlaceObj[magnetCon.coundId].x,p.itemPlaceObj[magnetCon.coundId].y);
+                        magnetCon.loc(magnetCon.startObj.x, magnetCon.startObj.y);
+                    }
+                }
+                
             })
         }
+        zog("updateStatus")
         if (p.lockScreenCon) p.lockScreenCon.top();
         if (p.timerCon) p.timerCon.top();
         stage.update();
@@ -748,8 +878,7 @@ function App() {
 
 
     App.prototype.showEditMode = function () {
-        if(p.editCon)
-        {
+        if (p.editCon) {
             p.editWin.dispose();
             p.editWin = null;
             p.editCon.dispose();
@@ -770,61 +899,60 @@ function App() {
         p.editCon.addTo();
 
 
-        p.addWordButtton = new Button({ label: "X", width: 50,backgroundColor:gray });
+        p.addWordButtton = new Button({ label: "X", width: 50, backgroundColor: gray });
         p.addWordButtton.addTo(p.editCon).pos({
             "horizontal": "right",
             "vertical": "top",
             "x": 20,
             "y": 10
         });
-        p.addWordButtton.on("mousedown",function(){
+        p.addWordButtton.on("mousedown", function () {
             location.reload();
         })
 
-        p.addWordButtton = new Button({ label: "New word", width: 150,backgroundColor:green });
+        p.addWordButtton = new Button({ label: "New word", width: 150, backgroundColor: green });
         p.addWordButtton.addTo(p.editCon).pos({
             "horizontal": "right",
             "vertical": "bottom",
             "x": 20,
             "y": 10
         });
-        p.addWordButtton.on("mousedown",function(){
+        p.addWordButtton.on("mousedown", function () {
             p.addWordToJson(true);
         })
 
 
-        p.updateJsonButtton = new Button({ label: "Save", width: 150,backgroundColor:red });
+        p.updateJsonButtton = new Button({ label: "Save", width: 150, backgroundColor: red });
         p.updateJsonButtton.addTo(p.editCon).pos({
             "horizontal": "center",
             "vertical": "bottom",
             "x": 20,
             "y": 10
         });
-        p.updateJsonButtton.on("mousedown",function(){
-            upadteJson({"words":p.words});
+        p.updateJsonButtton.on("mousedown", function () {
+            upadteJson({ "words": p.words });
         })
 
 
-        p.removeButtton = new Button({ label: "Remove", width: 150,backgroundColor:red });
+        p.removeButtton = new Button({ label: "Remove", width: 150, backgroundColor: red });
         p.removeButtton.addTo(p.editCon).pos({
             "horizontal": "left",
             "vertical": "bottom",
             "x": 20,
             "y": 10
         });
-        p.removeButtton.on("mousedown",function(){
-            if(p.editCon.editMode == "edit")
-            {
+        p.removeButtton.on("mousedown", function () {
+            if (p.editCon.editMode == "edit") {
                 p.editCon.editMode = "remove";
                 p.editCon.bg.color = red;
-            }else{
+            } else {
                 p.editCon.editMode = "edit";
                 p.editCon.bg.color = "#000000";
             }
             stage.update();
         })
 
-        
+
         stage.update();
     }
 
@@ -842,7 +970,7 @@ function App() {
         Swal.fire({
             title: 'Please Enter The Word',
             input: "text",
-            text:text,
+            text: text,
             inputPlaceholder: 'Please Enter The Word',
             allowOutsideClick: false,
             inputAttributes: {
@@ -854,8 +982,8 @@ function App() {
             showLoaderOnConfirm: true,
             preConfirm: (textFromUser) => {
                 if (newWord) {
-                    p.words.push({text:textFromUser});
-                    
+                    p.words.push({ text: textFromUser });
+
                 } else {
                     loop(p.words, function (data) {
                         if (data.text == text) {
@@ -880,7 +1008,7 @@ function App() {
         var colors = ["#F8E9DC", "#F2E6DF", "#D5E5E3", "#EFE7F3", "#DBF2EE", "#E4EEDC", "#DDE8FA"
             , "#F5D4D4", "#FCF6DA", "#E5E6FA", "#F9E5C7"];
 
-        
+
         var colorFun = Pick.series(colors);
         loop(p.words, function (wordObj, i) {
 
@@ -888,24 +1016,35 @@ function App() {
 
             var magnetCon = tempCon.magnetCon;
             magnetCon.coundId = i;
+            magnetCon.data = wordObj;
             magnetCon.label.text = wordObj.text;
             magnetCon.bgRect.color = colorFun();
             magnetCon.bgRect.widthOnly = magnetCon.label.width * 1.2;
             if (gameMode) {
                 magnetCon.drag({ all: true });
+                /*magnetCon.gesture({
+                    rotate:false,
+                    rect:new Boundary(0,0,stageW,stageH),
+                    minScale:.5,
+                    maxScale:3
+                 });*/
+
             }
             arr.push(magnetCon);
             magnetCon.on("mousedown", function () {
                 if (gameMode) {
-
                     p.startActiveTimer();
+                    magnetCon.sca(2);
+                    p.hideSearch();
                     magnetCon.addTo(stage);
                     if (magnetCon.startObj.isTop != true) {
                         p.fridgeCon.topMarkView.visible = true;
                     }
+
                     magnetCon.stagemouseupEvent = stage.on("stagemouseup", function () {
                         stage.off("stagemouseup", magnetCon.stagemouseupEvent);
                         p.fridgeCon.topMarkView.visible = false;
+                        magnetCon.sca(1);
                         if (magnetCon.hitTestBounds(p.fridgeCon.topRect)) {
                             magnetCon.startObj.isTop = true;
                             magnetCon.startObj.newX = magnetCon.x;
@@ -918,16 +1057,31 @@ function App() {
                             p.itemPlaceObj[magnetCon.coundId] = magnetCon.startObj;
                             magnetCon.loc(magnetCon.startObj.x, magnetCon.startObj.y);
                         }
+
+                         //https://nonsensefridge.com/Notify.php?title=HI&body=guys
+                       
+                            let data = {title: "Fridge was edited since your last visit",body:"Click here to view the fridge"};
+
+                            fetch("https://nonsensefridge.com/Notify.php", {
+                                method: "POST",
+                                headers: {'Content-Type': 'application/json'}, 
+                                body: JSON.stringify(data)
+                            }).then(res => {
+                                console.log("Request complete! response:", res);
+                            }).catch((error) => {
+                                zogr('Error:', error);
+                              });
+                        
+
                         p.updateSendObj();
                     })
                 } else {
-                    if(p.editCon.editMode == "edit")
-                    {
+                    if (p.editCon.editMode == "edit") {
                         p.addWordToJson(false, magnetCon.label.text);
-                    }else{
+                    } else {
                         p.removeWordFromJson(magnetCon.label.text);
                     }
-                    
+
                     //upadteJson();
                 }
             })
@@ -941,9 +1095,24 @@ function App() {
             spacingV: 20,
             valign: "center",
             align: "left"
-        }
-        )
+        });
+        wrapper.name = "wrapper";
+
+       
+
+
+        var wrapper2 = new Wrapper({
+            items: [],
+            width: wrapperWidth,
+            spacingH: 15,
+            spacingV: 20,
+            valign: "center",
+            align: "left"
+        });
+        wrapper2.name = "wrapper2";
+
         wrapper.addTo(conWrapper).mov(0, 20);
+        wrapper2.addTo(conWrapper).mov(0, 20);
         var rectForDrag = new Rectangle(conWrapper.width, conWrapper.height + 40, "rgba(0,0,0,0.01)");
         rectForDrag.addTo(conWrapper, 0);
         // wrapper.center().mov(0,70);
@@ -966,8 +1135,6 @@ function App() {
 
 
 
-        var arrSlice = wrapper.items2D;
-
         var win = new Window({
             backgroundColor: "rgba(0,0,0,0.01)",
             width: winWidth,
@@ -976,6 +1143,9 @@ function App() {
             padding: 0,
             slideDamp: .2
         });
+        conWrapper.wrapper = wrapper;
+        conWrapper.wrapper2 = wrapper2;
+        win.conWrapper = conWrapper;
         win.add(conWrapper);
 
         return win;
@@ -1094,17 +1264,16 @@ function askPassword(p) {
             xhr.onreadystatechange = function () { // Call a function when the state changes.
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                     debugger
-                    if(JSON.parse(xhr.response).message=="true")
-                    {
+                    if (JSON.parse(xhr.response).message == "true") {
                         p.showEditMode();
-                    }else{
+                    } else {
                         Swal.fire({
                             icon: 'warning',
-                            title:  "Incorrect password"
+                            title: "Incorrect password"
                         }
                         )
                     }
-                    
+
                 }
             }
 
